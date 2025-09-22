@@ -690,8 +690,9 @@
         // Custom cursor effect
         const cursor = document.querySelector('.cursor');
         const cursorGlow = document.querySelector('.cursor-glow');
-        let mouseX = 0;
-        let mouseY = 0;
+
+        let mouseX = 0, mouseY = 0;
+        let glowX = 0, glowY = 0;
 
         // Track mouse movement
         document.addEventListener('mousemove', (e) => {
@@ -701,13 +702,22 @@
 
         // Smooth cursor following
         function updateCursor() {
+            // Smoothly interpolate glow position
+            const speed = 0.1; // smaller = slower, more smoothing
+            glowX += (mouseX - glowX) * speed;
+            glowY += (mouseY - glowY) * speed;
+
+            // Apply positions
             cursor.style.left = mouseX + 'px';
             cursor.style.top = mouseY + 'px';
-            cursorGlow.style.left = mouseX + 'px';
-            cursorGlow.style.top = mouseY + 'px';
+            cursorGlow.style.left = glowX + 'px';
+            cursorGlow.style.top = glowY + 'px';
+
             requestAnimationFrame(updateCursor);
         }
+
         updateCursor();
+
 
         // Hover effects for interactive elements
         const hoverElements = document.querySelectorAll('a, button, .project-card, .btn, .stat-card');
