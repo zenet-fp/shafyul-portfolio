@@ -737,23 +737,6 @@
         });
 
 
-
-        // Hover effects for interactive elements
-        const hoverElements = document.querySelectorAll('a, button, .project-card, .btn, .stat-card');
-
-        hoverElements.forEach(element => {
-            element.addEventListener('mouseenter', () => {
-                cursor.classList.add('hover');
-                cursorGlow.classList.add('hover');
-            });
-
-            element.addEventListener('mouseleave', () => {
-                cursor.classList.remove('hover');
-                cursorGlow.classList.remove('hover');
-            });
-        });
-
-
         // Smooth scrolling for navigation links
         function smoothScrollTo(targetY, duration = 600) {
             const startY = window.scrollY;
