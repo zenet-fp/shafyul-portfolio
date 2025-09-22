@@ -39,19 +39,21 @@
             pointer-events: none;
             z-index: 9998;
             transform: translate(-50%, -50%);
-            transition: all 0.3s ease;
-        }
-
-        .cursor.hover {
-            width: 30px;
-            height: 30px;
-            background: radial-gradient(circle, rgba(96, 165, 250, 1) 0%, rgba(96, 165, 250, 0.6) 50%, transparent 100%);
+            transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+            opacity: 0.7; /* slightly visible by default */
         }
 
         .cursor-glow.hover {
             width: 60px;
             height: 60px;
+            opacity: 1; /* glow becomes brighter on hover */
         }
+
+        .cursor.hover {
+            width: 30px;
+            height: 30px;
+        }
+
 
         /* Show default cursor on mobile devices */
         @media (max-width: 768px) {
@@ -700,14 +702,12 @@
             mouseY = e.clientY;
         });
 
-        // Smooth cursor following
+        // Smooth cursor + glow
         function updateCursor() {
-            // Smoothly interpolate glow position
-            const speed = 0.1; // smaller = slower, more smoothing
+            const speed = 0.12; // smaller = smoother glow
             glowX += (mouseX - glowX) * speed;
             glowY += (mouseY - glowY) * speed;
 
-            // Apply positions
             cursor.style.left = mouseX + 'px';
             cursor.style.top = mouseY + 'px';
             cursorGlow.style.left = glowX + 'px';
@@ -715,8 +715,22 @@
 
             requestAnimationFrame(updateCursor);
         }
-
         updateCursor();
+
+        // Hover effects
+        const hoverElements = document.querySelectorAll('a, button, .project-card, .btn, .stat-card');
+
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+                cursorGlow.classList.add('hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+                cursorGlow.classList.remove('hover');
+            });
+        });
+
 
 
         // Hover effects for interactive elements
