@@ -307,11 +307,6 @@
             box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
         }
 
-        .project-card:not(:hover) {
-            transform: translateY(0);
-            border-color: #334155;
-            box-shadow: none;
-        }
 
         .project-card.featured {
             border: 2px solid #3b82f6;
@@ -325,11 +320,7 @@
             box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
         }
 
-        .project-card.featured:not(:hover) {
-            transform: translateY(0);
-            border-color: #3b82f6;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
-        }
+
 
         .project-featured-badge {
             position: absolute;
@@ -424,21 +415,12 @@
             color: #60a5fa;
         }
 
-        /* Hamburger animation */
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
-        }
-
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(6px, -6px);
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
             .hero h1 {
                 font-size: 2.5rem;
             }
@@ -512,7 +494,7 @@
     <section id="home" class="hero">
         <div class="container">
             <h1>Hi, I'm Shafyul</h1>
-            <p>I like coding (a lot) </p>
+            <p>I like coding (a lot)</p>
             <p>Year 13 Student passionate about Computing, AI, and Algorithm Design</p>
             <div class="cta-buttons">
                 <a href="#projects" class="btn btn-primary">View My Work</a>
@@ -784,7 +766,7 @@
         document.querySelectorAll('.project-card').forEach((card, index) => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(30px)';
-            card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s, box-shadow 0.4s ease, border-color 0.4s ease`;
             observer.observe(card);
         });
     </script>
