@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zenet FP - Developer Portfolio</title>
-    <!-- Locomotive Scroll CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.2.2/dist/locomotive-scroll.min.css">
 
     <style>
 
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            box-sizing: <border-box></border-box>;
+        }
+        html {
+          scroll-behavior: smooth;
         }
 
         body {
@@ -820,16 +821,6 @@
                 this.style.transform = 'translateY(0) scale(1)';
             });
         });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-          anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = this.getAttribute('href');
-            scroll.scrollTo(target); // Locomotive Scroll method
-          });
-        });
-
-
 
         // Remove parallax effect - hero stays in place
         </script>
