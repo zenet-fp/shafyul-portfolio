@@ -275,7 +275,13 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* centers horizontally */
+            justify-content: center; /* centers vertically */
         }
+
 
         .skill-card:hover {
             transform: translateY(-10px);
@@ -510,7 +516,7 @@
                 </div>
                 <div class="skill-card">
                     <div class="skill-icon">8+</div>
-                    <div>Algos Implemented</div>
+                    <div>Algorithms Implemented</div>
                 </div>
             </div>
             <div class="skills-grid">
@@ -533,7 +539,9 @@
         <h2 class="section-title">Projects</h2>
         <div class="projects-grid">
             <div class="project-card">
-                <h3 class="project-title">Educational Software Suite</h3>
+                <h3 class="project-title">
+                    Mathematical Educational Software
+                </h3>
                 <p class="project-description">
                     A comprehensive educational software combining game mechanics with mathematics learning. Features secure authentication with SHA-256/512 hashing, SQL database management, and advanced algorithms including A*, BFS, DFS, Prim's, Kruskal's, and recursive backtracker for maze generation and pathfinding.
                 </p>
@@ -542,6 +550,7 @@
                     <span class="tech-tag">SQLite</span>
                     <span class="tech-tag">Tkinter</span>
                     <span class="tech-tag">Algorithms</span>
+                    <span class="status-tag">In Development*</span>
                 </div>
             </div>
             <div class="project-card">
