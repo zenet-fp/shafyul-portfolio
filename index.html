@@ -482,10 +482,33 @@
         }
 
         .btn-small {
-    padding: 10px 18px;
-    font-size: 0.9rem;
-    border-radius: 30px;
-    }
+        padding: 10px 18px;
+        font-size: 0.9rem;
+        border-radius: 30px;
+        }
+
+        /* Smaller pills for skills section */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .skills-grid .skill-card {
+            padding: 4px 14px;
+            font-size: 0.75rem;
+            min-width: auto;
+            max-width: fit-content;
+            justify-content: center;
+        }
+
+        .skills-grid .skill-card .skill-icon {
+            font-size: 1rem;
+            font-weight: 500;
+            justify-content: center;
+        }
+
 
     </style>
 </head>
@@ -531,7 +554,9 @@
             &nbsp;
             <p>I've worked extensively with tree structures including Binary trees, graph traversal using DFS and BFS, and maze generation with recursive backtracker algorithms.</p>
         </div>
+
         <div class="achievements-skills-container">
+            <!-- Achievements -->
             <div class="achievements-grid">
                 <div class="skill-card">
                     <div class="skill-icon">15+</div>
@@ -542,17 +567,29 @@
                     <div>Algorithms Implemented</div>
                 </div>
             </div>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-icon">Python</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">Databases</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">Git</div>
-                </div>
+
+            <!-- Skills Header -->
+            <div style="text-align:center; margin:2px 0; font-size:1.3rem; font-weight:600; color:#00ff88;">
+                Skills
             </div>
+
+            <!-- Skills -->
+            <div class="skills-grid">
+                <div class="skill-card"><div class="skill-icon">Python</div></div>
+                <div class="skill-card"><div class="skill-icon">Databases</div></div>
+                <div class="skill-card"><div class="skill-icon">Git</div></div>
+                <div class="skill-card"><div class="skill-icon">Tkinter</div></div>
+                <div class="skill-card"><div class="skill-icon">Pygame</div></div>
+                <div class="skill-card"><div class="skill-icon">Data Analysis</div></div>
+                <div class="skill-card"><div class="skill-icon">Algorithm Design</div></div>
+                <div class="skill-card"><div class="skill-icon">Problem Solving</div></div>
+                <div class="skill-card"><div class="skill-icon">OOP</div></div>
+                <div class="skill-card"><div class="skill-icon">Software Architecture</div></div>
+            </div>
+
+
+
+
         </div>
     </div>
 </section>
