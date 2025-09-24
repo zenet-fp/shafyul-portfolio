@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zenet FP - Developer Portfolio</title>
+    <!-- Locomotive Scroll CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.2.2/dist/locomotive-scroll.min.css">
+
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -17,6 +21,24 @@
             color: #ffffff;
             overflow-x: hidden;
             line-height: 1.6;
+        }
+
+                /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00ff88, #00ccff);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #00ff88, #00ffaa);
         }
 
         /* Animated background particles */
@@ -463,11 +485,12 @@
     padding: 10px 18px;
     font-size: 0.9rem;
     border-radius: 30px;
-}
+    }
 
     </style>
 </head>
 <body>
+    <div data-scroll-container>
     <div class="particles" id="particles"></div>
 
     <nav>
@@ -477,7 +500,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#contact">Connect</a></li>
             </ul>
         </div>
     </nav>
@@ -694,17 +717,7 @@
             setTimeout(typeWriter, speed);
         }
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            });
-        });
+
 
         // Intersection Observer for fade-in animations
         const observerOptions = {
@@ -752,7 +765,31 @@
             });
         });
 
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = this.getAttribute('href');
+            scroll.scrollTo(target); // Locomotive Scroll method
+          });
+        });
+
+
+
         // Remove parallax effect - hero stays in place
-    </script>
+        </script>
+        </div> <!-- close data-scroll-container -->
+
+        <!-- Locomotive Scroll JS -->
+        <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.2.2/dist/locomotive-scroll.min.js"></script>
+        <script>
+          const scroll = new LocomotiveScroll({
+            el: document.querySelector('[data-scroll-container]'),
+            smooth: true,
+            lerp: 0.08,
+            multiplier: 1
+          });
+        </script>
+
+
 </body>
 </html>
