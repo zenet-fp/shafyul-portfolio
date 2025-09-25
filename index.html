@@ -358,10 +358,6 @@
             transition: left 0.6s ease;
         }
 
-        .project-card:hover::before {
-            left: 100%;
-        }
-
         .project-card:hover {
             transform: translateY(-15px);
             border-color: #00ff88;
@@ -544,11 +540,48 @@
         }
 
 
+        /* Hide default cursor and use our glow */
+        body {
+          cursor: none; /* hide system cursor */
+        }
+
+        .cursor-glow {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 30px;  /* a bit larger for visibility */
+          height: 30px;
+          border-radius: 50%;
+          pointer-events: none;
+          background: radial-gradient(circle, rgba(0,255,136,0.5) 0%, transparent 100%);
+          mix-blend-mode: screen;
+          transform: translate(-50%, -50%);
+          z-index: 9999;
+          box-shadow: 0 0 25px rgba(0,255,136,0.6);
+          transition: transform 0.05s linear;
+        }
+
+        /* Graph background */
+        #graph-bg {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+
+
     </style>
 </head>
 <body>
     <div data-scroll-container>
     <div class="particles" id="particles"></div>
+        <canvas id="graph-bg"></canvas>
+        <div class="cursor-glow" id="cursor-glow"></div>
+
 
     <nav>
         <div class="nav-content">
@@ -819,6 +852,8 @@
             }
         });
 
+
+
         // Initialize
         window.addEventListener('load', function() {
             createParticles();
@@ -836,6 +871,112 @@
             });
         });
 
+        // Cursor glow follows mouse
+        const cursorGlow = document.getElementById('cursor-glow');
+        let cursorX = window.innerWidth / 2;
+        let cursorY = window.innerHeight / 2;
+        let targetX = cursorX;
+        let targetY = cursorY;
+
+        document.addEventListener('mousemove', (e) => {
+          targetX = e.clientX;
+          targetY = e.clientY;
+        });
+
+        // animate glow so it eases toward the cursor
+        function animateCursor() {
+          cursorX += (targetX - cursorX) * 0.2; // easing
+          cursorY += (targetY - cursorY) * 0.2;
+          cursorGlow.style.top = cursorY + 'px';
+          cursorGlow.style.left = cursorX + 'px';
+          requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+
+        // Graph background with moving nodes
+        const canvas = document.getElementById('graph-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let nodes = [];
+        const numNodes = 50;
+
+        // Create random nodes
+        for (let i = 0; i < numNodes; i++) {
+          nodes.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.2,
+            vy: (Math.random() - 0.5) * 0.2
+          });
+        }
+
+        function drawGraph(mouseX, mouseY) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          nodes.forEach((n, i) => {
+            // move nodes
+            n.x += n.vx;
+            n.y += n.vy;
+
+            // bounce off walls
+            if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
+            if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
+
+            // draw node
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(0,255,136,0.6)";
+            ctx.fill();
+
+            // connect nearby nodes
+            for (let j = i + 1; j < nodes.length; j++) {
+              const n2 = nodes[j];
+              const dist = Math.hypot(n.x - n2.x, n.y - n2.y);
+              if (dist < 120) {
+                ctx.strokeStyle = `rgba(0,255,136,${1 - dist / 120})`;
+                ctx.lineWidth = 0.6;
+                ctx.beginPath();
+                ctx.moveTo(n.x, n.y);
+                ctx.lineTo(n2.x, n2.y);
+                ctx.stroke();
+              }
+            }
+
+            // subtle attraction to cursor
+            if (mouseX && mouseY) {
+              const dx = n.x - mouseX;
+              const dy = n.y - mouseY;
+              const dist = Math.hypot(dx, dy);
+              if (dist < 150) {
+                n.vx += dx * -0.0005;
+                n.vy += dy * -0.0005;
+              }
+            }
+          });
+        }
+
+        let mouseX = null, mouseY = null;
+        document.addEventListener('mousemove', (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        });
+
+        function animate() {
+          drawGraph(mouseX, mouseY);
+          requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        });
+
+
         // Remove parallax effect - hero stays in place
         </script>
         </div> <!-- close data-scroll-container -->
@@ -850,6 +991,9 @@
             multiplier: 1
           });
         </script>
+
+
+
 
 
 </body>
