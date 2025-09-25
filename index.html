@@ -572,6 +572,21 @@
           pointer-events: none;
         }
 
+        /* Hide glow on touch devices */
+        @media (max-width: 768px) {
+          body {
+            cursor: auto; /* restore default cursor */
+          }
+          .cursor-glow {
+            display: none; /* no glow on mobile */
+          }
+        }
+        
+        @media (max-width: 768px) {
+          body {
+            cursor: auto; /* default cursor restored */
+          }
+        }
 
 
     </style>
@@ -873,25 +888,35 @@
 
         // Cursor glow follows mouse
         const cursorGlow = document.getElementById('cursor-glow');
-        let cursorX = window.innerWidth / 2;
-        let cursorY = window.innerHeight / 2;
-        let targetX = cursorX;
-        let targetY = cursorY;
 
-        document.addEventListener('mousemove', (e) => {
-          targetX = e.clientX;
-          targetY = e.clientY;
-        });
+        // Detect if device has a fine pointer (desktop mouse)
+        const isDesktop = window.matchMedia("(pointer: fine)").matches;
 
-        // animate glow so it eases toward the cursor
-        function animateCursor() {
-          cursorX += (targetX - cursorX) * 0.2; // easing
-          cursorY += (targetY - cursorY) * 0.2;
-          cursorGlow.style.top = cursorY + 'px';
-          cursorGlow.style.left = cursorX + 'px';
-          requestAnimationFrame(animateCursor);
+        if (isDesktop) {
+          // Only run cursor glow animation on desktop
+          let cursorX = window.innerWidth / 2;
+          let cursorY = window.innerHeight / 2;
+          let targetX = cursorX;
+          let targetY = cursorY;
+
+          document.addEventListener('mousemove', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+          });
+
+          function animateCursor() {
+            cursorX += (targetX - cursorX) * 0.2; // easing
+            cursorY += (targetY - cursorY) * 0.2;
+            cursorGlow.style.top = cursorY + 'px';
+            cursorGlow.style.left = cursorX + 'px';
+            requestAnimationFrame(animateCursor);
+          }
+          animateCursor();
+        } else {
+          // On mobile: completely remove the glow element
+          cursorGlow.remove();
         }
-        animateCursor();
+
 
 
         // Graph background with moving nodes
