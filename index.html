@@ -3,81 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zenet FP - Developer Portfolio</title>
-
+    <title>Shafyul Abdin - Developer Portfolio</title>
     <style>
-
         * {
             margin: 0;
             padding: 0;
-            box-sizing: <border-box></border-box>;
+            box-sizing: border-box;
         }
+
+        :root {
+            --primary: #00ff88;
+            --secondary: #00ccff;
+            --accent: #ff0080;
+            --dark: #0a0a0a;
+            --dark-card: #131313;
+            --text-primary: #ffffff;
+            --text-secondary: #d0d0d0;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
         html {
-          scroll-behavior: smooth;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0a0a0a;
-            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--dark);
+            color: var(--text-primary);
             overflow-x: hidden;
             line-height: 1.6;
+            cursor: none;
         }
 
-                /* Custom scrollbar for webkit browsers */
-        ::-webkit-scrollbar {
-            width: 10px;
+        /* Premium Cursor */
+        .cursor {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: all 0.15s ease;
+            mix-blend-mode: difference;
+            opacity: 0.8;
         }
 
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
+        /* Ensure cursor is centered and scaling preserves center.
+           Also add a dedicated 'grow' class for hover state so JS doesn't overwrite transforms. */
+        .cursor, .cursor-dot {
+            transform: translate(-50%,-50%) scale(1);
+            transition: transform 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
         }
 
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #00ff88, #00ccff);
-            border-radius: 5px;
+        /* scale when hovered — adjust scale as you like (1.25..1.4 recommended) */
+        .cursor.grow {
+            transform: translate(-50%,-50%) scale(1.25);
+            border-color: var(--secondary);
+            opacity: 1;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #00ff88, #00ffaa);
+        .cursor-dot.grow {
+            transform: translate(-50%,-50%) scale(1.05);
         }
 
-        /* Animated background particles */
-        .particles {
+        /* Proper ripple styling so added spans don't break layout or appear oversized */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            pointer-events: none;
+            transform: scale(0);
+            animation: rippleAnim 0.6s cubic-bezier(0.4,0,0.2,1) forwards;
+            will-change: transform, opacity;
+            filter: blur(0.5px);
+        }
+
+        @keyframes rippleAnim {
+            to {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
+
+
+        .cursor-dot {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10001;
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        /* Animated Grid Background */
+        .grid-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 1;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
         }
 
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #00ff88;
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        /* Gradient Orbs */
+        .gradient-orb {
+            position: fixed;
             border-radius: 50%;
-            animation: float 65s infinite linear;
-            opacity: 0.6;
+            filter: blur(100px);
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            top: -200px;
+            right: -200px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -150px;
+            left: -150px;
+            animation: float 25s ease-in-out infinite reverse;
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(100vh) translateX(0px);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100px) translateX(100px);
-                opacity: 0;
-            }
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(50px, 50px); }
         }
 
         /* Navigation */
@@ -86,742 +167,921 @@
             top: 0;
             width: 100%;
             z-index: 1000;
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(10, 10, 10, 0.7);
+            border-bottom: 1px solid var(--border);
             transition: all 0.3s ease;
-            padding: 0; /* remove extra nav padding */
         }
 
-        /* Flex container */
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
         .nav-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 16px 24px;   /* single source of spacing */
+            padding: 24px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 16px; /* smaller gap to avoid cut-off */
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #00ff88, #00ccff);
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            cursor: pointer;
-            text-decoration: none;
-            white-space: nowrap;
+            letter-spacing: -1px;
         }
+
         .nav-links {
             display: flex;
-            flex-wrap: wrap;
+            gap: 50px;
             list-style: none;
-            justify-content: flex-end;
-            gap: 30px;
-            flex-wrap: wrap;
         }
 
         .nav-links a {
-            color: #ffffff;
+            color: var(--text-secondary);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
             transition: all 0.3s ease;
             position: relative;
         }
 
-        .nav-links a:hover {
-            color: #4ade80;
-            text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
 
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
 
+        .nav-links a:hover::before {
+            width: 100%;
+        }
 
         /* Hero Section */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
             position: relative;
             z-index: 10;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+            padding: 0 60px;
         }
 
         .hero-content {
-            max-width: 800px;
-            padding: 0 20px;
+            max-width: 1000px;
+        }
+
+        .hero-label {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+            display: inline-block;
+            padding: 8px 20px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 30px;
+            background: rgba(0, 255, 136, 0.05);
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #ffffff, #00ff88, #00ccff);
+            font-size: clamp(3.5rem, 10vw, 7rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 40px;
+            letter-spacing: -3px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 50%, var(--secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: textGlow 3s ease-in-out infinite alternate;
+            animation: gradientShift 8s ease infinite;
+            background-size: 200% 200%;
         }
 
-        @keyframes textGlow {
-            from {
-                text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-            }
-            to {
-                text-shadow: 0 0 40px rgba(0, 204, 255, 0.8), 0 0 60px rgba(0, 255, 136, 0.6);
-            }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.5s both;
-        }
-
-        .typing-animation {
-            border-right: 2px solid #00ff88;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { border-right-color: #00ff88; }
-            51%, 100% { border-right-color: transparent; }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 0.9;
-                transform: translateY(0);
-            }
+        .hero-description {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 50px;
+            max-width: 800px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.6s forwards;
         }
 
         .cta-buttons {
             display: flex;
-            gap: 20px;
-            justify-content: center;
+            gap: 25px;
             flex-wrap: wrap;
-            animation: fadeInUp 1s ease-out 1s both;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.8s forwards;
         }
 
         .btn {
-            padding: 15px 30px;
+            padding: 18px 40px;
             border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #00ff88, #00ccff);
-            color: #000;
-            transform: translateY(0);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 255, 136, 0.4);
         }
 
         .btn-secondary {
             background: transparent;
-            color: #ffffff;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #00ff88;
-            transform: translateY(-3px);
+            border-color: var(--primary);
+            background: rgba(0, 255, 136, 0.05);
+            transform: translateY(-2px);
         }
 
         /* Sections */
         section {
-            padding: 100px 50px;
-            max-width: 1200px;
+            padding: 140px 60px;
+            max-width: 1400px;
             margin: 0 auto;
             position: relative;
             z-index: 10;
         }
 
+        .section-header {
+            margin-bottom: 100px;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
         .section-title {
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 60px;
-            background: linear-gradient(135deg, #ffffff, #00ff88);
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.3;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, var(--text-primary), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
-        /* About Section */
-        .about-content {
+        /* About Section - Bento Box Layout */
+        .about-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: start;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 25px;
         }
 
-        .about-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-
-        .achievements-skills-container {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .skill-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* centers horizontally */
-            justify-content: center; /* centers vertically */
-        }
-
-
-        .skill-card:hover {
-            transform: translateY(-10px);
-            background: rgba(0, 255, 136, 0.1);
-            border-color: #00ff88;
-            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.2);
-        }
-
-        .skill-icon {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            display: block;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        /* Projects Section */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        .project-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s ease;
-            backdrop-filter: blur(10px);
+        .about-card {
+            background: var(--dark-card);
+            border-radius: 24px;
+            padding: 50px;
+            border: 1px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
 
-        .project-card::before {
+        .about-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.05), rgba(0, 204, 255, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .about-card:hover::before {
+            opacity: 1;
+        }
+
+        .about-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 255, 136, 0.3);
+            box-shadow: 0 25px 60px rgba(0, 255, 136, 0.15);
+        }
+
+        .about-main {
+            grid-column: span 7;
+        }
+
+        .about-text p {
+            font-size: 1.25rem;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+        }
+
+        .quote-section {
+            margin-top: 40px;
+            padding: 30px;
+            border-left: 4px solid var(--primary);
+            background: rgba(0, 255, 136, 0.05);
+            border-radius: 12px;
+        }
+
+        .quote-label {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .quote-section em {
+            color: var(--text-primary);
+            font-style: italic;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .about-stats {
+            grid-column: span 5;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.08), rgba(0, 204, 255, 0.08));
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
             transition: left 0.6s ease;
         }
 
+        .stat-card:hover::after {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+            border-color: rgba(0, 255, 136, 0.4);
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .skills-card {
+            grid-column: span 12;
+            padding: 60px;
+        }
+
+        .skills-card h3 {
+            font-size: 2rem;
+            margin-bottom: 35px;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .skill-tag {
+            background: rgba(0, 255, 136, 0.08);
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.15), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .skill-tag:hover::before {
+            left: 100%;
+        }
+
+        .skill-tag:hover {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 35px;
+        }
+
+        .project-card {
+            background: var(--dark-card);
+            border-radius: 24px;
+            padding: 50px;
+            border: 1px solid var(--border);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+
+
         .project-card:hover {
-            transform: translateY(-15px);
-            border-color: #00ff88;
-            box-shadow: 0 25px 50px rgba(0, 255, 136, 0.2);
+            transform: translateY(-12px);
+            border-color: rgba(0, 255, 136, 0.4);
+            box-shadow: 0 30px 70px rgba(0, 255, 136, 0.2);
         }
 
         .project-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #00ff88;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
         }
 
         .project-description {
-            margin-bottom: 20px;
-            opacity: 0.9;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
         }
 
         .project-tech {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
-        .tech-tag {
-            background: rgba(0, 255, 136, 0.2);
-            color: #00ff88;
-            padding: 5px 12px;
-            border-radius: 15px;
+        .tech-badge {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 8px 18px;
+            border-radius: 25px;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .tech-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.15), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .tech-badge:hover::before {
+            left: 100%;
+        }
+
+        .tech-badge:hover {
+            background: rgba(0, 255, 136, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .project-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            padding-bottom: 2px;
+            border-bottom: 2px solid transparent;
+        }
+
+        .project-link:hover {
+            gap: 15px;
+            border-bottom-color: var(--primary);
         }
 
         /* Contact Section */
         .contact-content {
             text-align: center;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
+        }
+
+        .contact-content p {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            margin-bottom: 60px;
+            line-height: 1.9;
         }
 
         .contact-links {
             display: flex;
             justify-content: center;
             gap: 30px;
-            margin-top: 40px;
             flex-wrap: wrap;
         }
 
         .contact-link {
             display: flex;
             align-items: center;
-            gap: 10px;
-            color: #ffffff;
+            gap: 15px;
+            padding: 20px 40px;
+            background: var(--dark-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            color: var(--text-primary);
             text-decoration: none;
+            font-weight: 700;
             font-size: 1.1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
         }
 
         .contact-link:hover {
-            color: #4ade80;
-            transform: translateY(-3px);
+            background: rgba(0, 255, 136, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 255, 136, 0.2);
+        }
+
+        .contact-link svg {
+            width: 24px;
+            height: 24px;
         }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            opacity: 0.7;
+            padding: 80px 60px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 1rem;
         }
 
-        /* Responsive Design */
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .about-main {
+                grid-column: span 12;
+            }
+
+            .about-stats {
+                grid-column: span 12;
+                flex-direction: row;
+            }
+        }
+
         @media (max-width: 768px) {
-            nav {
-                padding: 15px 20px;
+            body {
+                cursor: auto;
+            }
+
+            .cursor, .cursor-dot {
+                display: none;
+            }
+
+            .nav-content {
+                padding: 18px 25px;
             }
 
             .nav-links {
-                gap: 20px;
+                gap: 25px;
             }
 
-            section {
-                padding: 80px 20px;
+            .nav-links a {
+                font-size: 0.85rem;
             }
 
-            .about-content {
-                grid-template-columns: 1fr;
-                gap: 40px;
+            section, .hero {
+                padding: 80px 25px;
             }
 
-            .achievements-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .skills-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .about-card {
+                padding: 30px;
             }
 
             .projects-grid {
                 grid-template-columns: 1fr;
             }
 
-            .contact-links {
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-            }
-
             .cta-buttons {
                 flex-direction: column;
-                align-items: center;
-            }
-        }
-
-        /* Scroll animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .btn-small {
-        padding: 10px 18px;
-        font-size: 0.9rem;
-        border-radius: 30px;
-        }
-
-        /* Smaller pills for skills section */
-        .skills-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-        }
-
-        .skills-grid .skill-card {
-            padding: 4px 14px;
-            font-size: 0.75rem;
-            min-width: auto;
-            max-width: fit-content;
-            justify-content: center;
-        }
-
-        .skills-grid .skill-card .skill-icon {
-            font-size: 1rem;
-            font-weight: 500;
-            justify-content: center;
-        }
-
-        /* Navbar adjustments for small screens */
-        @media (max-width: 768px) {
-            nav {
-                padding: 8px 13px; /* reduce padding */
+                width: 100%;
             }
 
-            .logo {
-                font-size: 1.2rem; /* smaller logo font */
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
 
-            .nav-links {
-                gap: 15px; /* reduce spacing between links */
+            .contact-links {
+                flex-direction: column;
             }
 
-            .nav-links a {
-                font-size: 0.9rem; /* smaller link font */
+            .contact-link {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .about-stats {
+                flex-direction: column;
             }
         }
-        .btn-small2 {
-            padding: 3px 10px;
-            font-size: 0.80rem;
-            border-radius: 19px;
-            line-height: 1.9;
-        }
-
-
-        /* Hide default cursor and use our glow */
-        body {
-          cursor: none; /* hide system cursor */
-        }
-
-        .cursor-glow {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 30px;  /* a bit larger for visibility */
-          height: 30px;
-          border-radius: 50%;
-          pointer-events: none;
-          background: radial-gradient(circle, rgba(0,255,136,0.5) 0%, transparent 100%);
-          mix-blend-mode: screen;
-          transform: translate(-50%, -50%);
-          z-index: 9999;
-          box-shadow: 0 0 25px rgba(0,255,136,0.6);
-          transition: transform 0.05s linear;
-        }
-
-        /* Graph background */
-        #graph-bg {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 0;
-          pointer-events: none;
-        }
-
-        /* Hide glow on touch devices */
-        @media (max-width: 768px) {
-          body {
-            cursor: auto; /* restore default cursor */
-          }
-          .cursor-glow {
-            display: none; /* no glow on mobile */
-          }
-        }
-
-        @media (max-width: 768px) {
-          body {
-            cursor: auto; /* default cursor restored */
-          }
-        }
-
-        .reveal {
-          opacity: 0;
-          transform: translateY(40px);
-          transition: all 0.8s ease;
-        }
-        .reveal.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        /* Neon gradient border effect */
-        .neon-border {
-          position: relative;
-          border-radius: 12px;
-          overflow: hidden;
-          z-index: 1;
-        }
-
-        .neon-border::before {
-          content: "";
-          position: absolute;
-          inset: -2px; /* border thickness */
-          border-radius: inherit;
-          background: linear-gradient(135deg, #00ff88, #0088ff, #00ff88);
-          background-size: 300% 300%;
-          animation: gradientGlow 8s ease infinite;
-          z-index: -1;
-        }
-
-        .neon-border > * {
-          position: relative;
-          z-index: 2; /* keep content above glow */
-        }
-
-        @keyframes gradientGlow {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-
-
     </style>
 </head>
 <body>
-    <div data-scroll-container>
-    <div class="particles" id="particles"></div>
-        <canvas id="graph-bg"></canvas>
-        <div class="cursor-glow" id="cursor-glow"></div>
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+    <div class="grid-background"></div>
+    <canvas class="bg-animation"></canvas>
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
 
-
-
-    <nav>
-        <div class="nav-content">
-            <a href="#home" class="logo">Shafyul</a>
+    <nav id="nav">
+    <div class="nav-content">
+        <a href="#home" class="logo" style="text-decoration: none; cursor: pointer;">Shafyul</a>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Connect</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </div>
     </nav>
 
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Hi, I'm Shafyul</h1>
-            <p>Y13 Student • <span class="typing-animation" id="typewriter">Passionate Developer</span></p>
-            <p>Exploring the frontiers of Computer Science and AI</p>
+
+            <h1>Hi, I'm <span class="gradient-text">Shafyul</span></h1>
+            <div class="hero-label">Y13 Student & Developer</div>
+            <p class="hero-description">
+                A passionate developer exploring the frontiers of Computer Science and AI.
+
+            </p>
             <div class="cta-buttons">
                 <a href="https://github.com/zenet-fp" class="btn btn-primary" target="_blank">
-                    View GitHub
+                    <span>View GitHub</span>
+                    <span>→</span>
                 </a>
                 <a href="#projects" class="btn btn-secondary">
-                    See Projects
+                    <span>Explore Projects</span>
                 </a>
             </div>
         </div>
     </section>
 
-<section id="about" class="fade-in">
-    <h2 class="section-title">About Me</h2>
-    <div class="about-content">
-        <div class="about-text">
-            <p>I'm currently a Year 13 student with a deep interest in the field of computing and software development. My journey in programming has led me to explore diverse areas including game development, data structures, financial applications, and educational software.</p>
-            &nbsp;
-            <p>I am an eager and adaptable individual who loves collaboration, programming innovation, and... coding.</p>
-            &nbsp;
-            <p>Favourite quote: <em>“We have proposed a system for electronic transactions without relying on trust.”</em> (Satoshi Nakamoto, 2008)</p>
+    <section id="about">
+        <div class="section-header reveal">
+            <div class="section-label">About Me</div>
+            <h2 class="section-title">Building the Future,<br>One Line at a Time</h2>
         </div>
 
-        <div class="achievements-skills-container">
-            <!-- Achievements -->
-            <div class="achievements-grid">
-                <div class="skill-card">
-                    <div class="skill-icon">15+</div>
-                    <div>Projects Completed</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">8+</div>
-                    <div>Algorithms Implemented</div>
+        <div class="about-grid">
+            <div class="about-card about-main reveal">
+                <div class="about-text">
+                    <p>
+                        I'm currently a Year 13 student with a deep interest in the field of computing and
+                        software development. My journey in programming has led me to explore diverse areas
+                        including game development, data structures, financial applications, and educational software.
+                    </p>
+                    <p>
+                        I am an eager and adaptable individual who loves collaboration, programming innovation,
+                        and solving complex problems through elegant code solutions.
+                    </p>
+                    <div class="quote-section">
+                        <div class="quote-label">My Favourite Quote</div>
+                        <em>"We have proposed a system for electronic transactions without relying on trust."</em>
+                        <div style="margin-top: 10px; color: var(--text-secondary); font-size: 0.95rem;">
+                            — Satoshi Nakamoto, 2008
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Skills Header -->
-            <div style="text-align:center; margin:2px 0; font-size:1.3rem; font-weight:600; color:#00ff88;">
-                Skills
-            </div>
-
-            <!-- Skills -->
-            <div class="skills-grid">
-                <div class="skill-card"><div class="skill-icon">Python</div></div>
-                <div class="skill-card"><div class="skill-icon">Databases</div></div>
-                <div class="skill-card"><div class="skill-icon">Git</div></div>
-                <div class="skill-card"><div class="skill-icon">Tkinter</div></div>
-                <div class="skill-card"><div class="skill-icon">Pygame</div></div>
-                <div class="skill-card"><div class="skill-icon">Data Analysis</div></div>
-                <div class="skill-card"><div class="skill-icon">Algorithm Design</div></div>
-                <div class="skill-card"><div class="skill-icon">Problem Solving</div></div>
-                <div class="skill-card"><div class="skill-icon">OOP</div></div>
-                <div class="skill-card"><div class="skill-icon">Software Architecture</div></div>
-            </div>
-
-
-
-
-        </div>
-    </div>
-</section>
-
-
-    <section id="projects" class="fade-in">
-        <h2 class="section-title">Projects</h2>
-        <div class="projects-grid">
-            <div class="project-card">
-                <h3 class="project-title">
-                    Mathematical Educational Software
-                </h3>
-                <p class="project-description">
-                    A comprehensive educational software combining game mechanics with mathematics learning. Features secure authentication with SHA-256/512 hashing, SQL database management, and advanced algorithms including A*, BFS, DFS, Prim's, Kruskal's, and recursive backtracker for maze generation and pathfinding.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">SQL</span>
-                    <span class="tech-tag">Tkinter</span>
-                    <span class="tech-tag">Algorithms</span>
+            <div class="about-stats reveal">
+                <div class="stat-card">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Projects Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Industry Standard Algorithms Implemented</div>
                 </div>
             </div>
-            <div class="project-card">
-                <h3 class="project-title">Dijkstra's Algorithm Visualiser</h3>
-                <p class="project-description">
-                    Interactive visualization of Dijkstra's shortest path algorithm with maze generation. Demonstrates pathfinding concepts through an engaging visual interface with real-time algorithm execution.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Pygame</span>
-                    <span class="tech-tag">Pathfinding</span>
+
+            <div class="about-card skills-card reveal">
+                <h3>Technical Skills</h3>
+                <div class="skills-grid">
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">SQL Databases</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">JSON</span>
+                    <span class="skill-tag">Tkinter</span>
+                    <span class="skill-tag">Data Analysis</span>
+                    <span class="skill-tag">Algorithm Design</span>
+                    <span class="skill-tag">Problem Solving</span>
+                    <span class="skill-tag">OOP</span>
+                    <span class="skill-tag">Software Architecture</span>
                 </div>
-                <a href="https://github.com/zenet-fp/Dijkstra-s-Shortest-Path-Visualiser-" class="btn btn-secondary btn-small" target="_blank">View Code</a>
-            </div>
-            <div class="project-card">
-                <h3 class="project-title">Personal Finance Manager</h3>
-                <p class="project-description">
-                    Personal finance management application with budget tracking, expense categorization, and financial analytics. Built with clean architecture and data persistence for comprehensive financial oversight.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">SQLite</span>
-                    <span class="tech-tag">Data Analysis</span>
-                </div>
-                <a href="https://github.com/zenet-fp/Finance-Manager-in-py" class="btn btn-secondary btn-small" target="_blank">View Code</a>
-            </div>
-            <div class="project-card">
-                <h3 class="project-title">Mathematical Expression Game</h3>
-                <p class="project-description">
-                    Educational math game where players form mathematical expressions with unknown numbers. Combines entertainment with mathematical skill development and logical thinking.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Game Logic</span>
-                    <span class="tech-tag">Mathematics</span>
-                </div>
-                <a href="https://github.com/zenet-fp/Number-Shooting-Game" class="btn btn-secondary btn-small" target="_blank">View Code</a>
-            </div>
-            <div class="project-card">
-                <h3 class="project-title">Connect 4 Game</h3>
-                <p class="project-description">
-                    Classic Connect 4 game implementation with intelligent game state management and win detection algorithms. Features clean UI and responsive gameplay with strategic AI opponent.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Game AI</span>
-                    <span class="tech-tag">Tkinter</span>
-                </div>
-                <a href="https://github.com/zenet-fp/4-In-A-Row---tkinter" class="btn btn-secondary btn-small" target="_blank">View Code</a>
-            </div>
-            <div class="project-card">
-                <h3 class="project-title">Deal or No Deal Recreation</h3>
-                <p class="project-description">
-                    Python recreation of the popular UK game show with probability calculations, random selection algorithms, and interactive gameplay mechanics. Features statistical analysis and decision-making components.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Statistics</span>
-                    <span class="tech-tag">Random Algorithms</span>
-                </div>
-                <a href="https://github.com/zenet-fp/Deal-Or-No-Deal" class="btn btn-secondary btn-small" target="_blank">View Code</a>
-            </div>
-            <div class="project-card">
-                <h3 class="project-title">Classic Games Collection</h3>
-                <p class="project-description">
-                    Collection of classic games including Noughts and Crosses, Cows and Bulls, and mini-game compilations. Showcases fundamental programming concepts and game logic implementation.
-                </p>
-                <div class="project-tech">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Game Development</span>
-                    <span class="tech-tag">Logic Design</span>
-                </div>
-                <a href="https://github.com/zenet-fp/Noughts-and-Crosses" class="btn btn-secondary btn-small2"  target="_blank">Tic tac Toe</a>
-                <a href="https://github.com/zenet-fp/Cows_and_Bulls.py" class="btn btn-secondary btn-small2" target="_blank">Cows & Bulls</a>
-                <a href="https://github.com/zenet-fp/3-mini-games-in-py" class="btn btn-secondary btn-small2" target="_blank">3 Mini Games</a>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="fade-in">
-        <h2 class="section-title">Let's Connect</h2>
-        <div class="contact-content">
-            <p>Whether you're a fellow student, developer, or just someone passionate about technology, I'd love to hear from you!</p>
+    <section id="projects">
+        <div class="section-header reveal">
+            <div class="section-label">Selected Work</div>
+            <h2 class="section-title">Featured Projects</h2>
+        </div>
+
+        <div class="projects-grid">
+            <div class="project-card reveal">
+                <h3 class="project-title">Mathematical Educational Software</h3>
+                <p class="project-description">
+                    A comprehensive educational platform combining game mechanics with mathematics learning.
+                    Features secure authentication with SHA-256/512 hashing, SQL database management, and
+                    advanced algorithms including A*, BFS, DFS, Prim's, Kruskal's, and recursive backtracker
+                    for maze generation and pathfinding.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">SQL</span>
+                    <span class="tech-badge">Industry Standard Algorithms</span>
+                    <span class="tech-badge">JSON</span>
+                    <span class="tech-badge">Tkinter</span>
+                    <span class="tech-badge">Algorithms</span>
+                </div>
+            </div>
+
+            <div class="project-card reveal">
+                <h3 class="project-title">Dijkstra's Algorithm Visualiser</h3>
+                <p class="project-description">
+                    Interactive visualization of Dijkstra's shortest path algorithm with maze generation.
+                    Demonstrates pathfinding concepts through an engaging visual interface with real-time
+                    algorithm execution.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">AI Algorithms</span>
+                    <span class="tech-badge">Pathfinding</span>
+                </div>
+                <a href="https://github.com/zenet-fp/Dijkstra-s-Shortest-Path-Visualiser-" class="project-link" target="_blank">
+                    View Code →
+                </a>
+            </div>
+
+            <div class="project-card reveal">
+                <h3 class="project-title">Personal Finance Manager</h3>
+                <p class="project-description">
+                    Personal finance management application with budget tracking, expense categorization,
+                    and financial analytics. Built with clean architecture and data persistence for
+                    comprehensive financial oversight.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">SQLite</span>
+                    <span class="tech-badge">Data Analysis</span>
+                </div>
+                <a href="https://github.com/zenet-fp/Finance-Manager-in-py" class="project-link" target="_blank">
+                    View Code →
+                </a>
+            </div>
+
+            <div class="project-card reveal">
+                <h3 class="project-title">Mathematical Expression Game</h3>
+                <p class="project-description">
+                    Educational math game where players form mathematical expressions with unknown numbers.
+                    Combines entertainment with mathematical skill development and logical thinking.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Game Logic</span>
+                    <span class="tech-badge">Mathematics</span>
+                </div>
+                <a href="https://github.com/zenet-fp/Number-Shooting-Game" class="project-link" target="_blank">
+                    View Code →
+                </a>
+            </div>
+
+            <div class="project-card reveal">
+                <h3 class="project-title">Connect 4 Game</h3>
+                <p class="project-description">
+                    Classic Connect 4 game implementation with intelligent game state management and win
+                    detection algorithms. Features clean UI and responsive gameplay with strategic AI opponent.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Game AI</span>
+                    <span class="tech-badge">Tkinter</span>
+                </div>
+                <a href="https://github.com/zenet-fp/4-In-A-Row---tkinter" class="project-link" target="_blank">
+                    View Code →
+                </a>
+            </div>
+
+            <div class="project-card reveal">
+                <h3 class="project-title">Deal or No Deal Recreation</h3>
+                <p class="project-description">
+                    Python recreation of the popular UK game show with probability calculations, random
+                    selection algorithms, and interactive gameplay mechanics. Features statistical analysis
+                    and decision-making components.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Statistics</span>
+                    <span class="tech-badge">Expected Value Algorithms</span>
+                </div>
+                <a href="https://github.com/zenet-fp/Deal-Or-No-Deal" class="project-link" target="_blank">
+                    View Code →
+                </a>
+            </div>
+
+            <div class="project-card reveal">
+                <h3 class="project-title">Classic Games Collection</h3>
+                <p class="project-description">
+                    Collection of classic games including Noughts and Crosses, Cows and Bulls, and mini-game
+                    compilations. Showcases fundamental programming concepts and game logic implementation.
+                </p>
+                <div class="project-tech">
+                    <span class="tech-badge">Python</span>
+                    <span class="tech-badge">Game Development</span>
+                    <span class="tech-badge">Logic Design</span>
+                </div>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;">
+                    <a href="https://github.com/zenet-fp/Noughts-and-Crosses" class="project-link" target="_blank">
+                        Tic Tac Toe →
+                    </a>
+                    <a href="https://github.com/zenet-fp/Cows_and_Bulls.py" class="project-link" target="_blank">
+                        Cows & Bulls →
+                    </a>
+                    <a href="https://github.com/zenet-fp/3-mini-games-in-py" class="project-link" target="_blank">
+                        Mini Games →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="section-header reveal">
+            <div class="section-label">Get In Touch</div>
+            <h2 class="section-title">Let's Connect</h2>
+        </div>
+
+        <div class="contact-content reveal">
+            <p>
+                Whether you're a fellow student, developer, or just someone passionate about technology,
+                I'd love to hear from you. Let's build something amazing together.
+            </p>
             <div class="contact-links">
                 <a href="https://github.com/zenet-fp" class="contact-link" target="_blank">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
                     GitHub
                 </a>
                 <a href="mailto:s.abdin008@gmail.com" class="contact-link">
+                    <svg fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M0 3v18h24v-18h-24zm6.623 7.929l-4.623 5.712v-9.458l4.623 3.746zm-4.141-5.929h19.035l-9.517 7.713-9.518-7.713zm5.694 7.188l3.824 3.099 3.83-3.104 5.612 6.817h-18.779l5.513-6.812zm9.208-1.264l4.616-3.741v9.348l-4.616-5.607z"/>
+                    </svg>
                     Email
                 </a>
             </div>
@@ -829,240 +1089,238 @@
     </section>
 
     <footer>
-        <p>&copy; 2025 Shafyul. Built with passion for technology.</p>
+        <p>&copy; 2025 Shafyul Abdin. Built with passion for technology.</p>
     </footer>
 
     <script>
-        // Create floating particles
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                particlesContainer.appendChild(particle);
-            }
-        }
+        // Premium Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
 
-        // Typewriter effect
-        const typewriterText = ['Passionate Developer', 'AI Enthusiast', 'Problem Solver', 'Tech Explorer'];
-        let currentTextIndex = 0;
-        let currentCharIndex = 0;
-        let isDeleting = false;
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let dotX = 0, dotY = 0;
 
-        function typeWriter() {
-            const element = document.getElementById('typewriter');
-            const currentText = typewriterText[currentTextIndex];
-
-            if (isDeleting) {
-                element.textContent = currentText.substring(0, currentCharIndex - 1);
-                currentCharIndex--;
-            } else {
-                element.textContent = currentText.substring(0, currentCharIndex + 1);
-                currentCharIndex++;
-            }
-
-            let speed = isDeleting ? 50 : 100;
-
-            if (!isDeleting && currentCharIndex === currentText.length) {
-                speed = 500;
-                isDeleting = true;
-            } else if (isDeleting && currentCharIndex === 0) {
-                isDeleting = false;
-                currentTextIndex = (currentTextIndex + 1) % typewriterText.length;
-            }
-
-            setTimeout(typeWriter, speed);
-        }
-
-
-
-        // Intersection Observer for fade-in animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        // Observe all fade-in elements
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            dotX = e.clientX;
+            dotY = e.clientY;
         });
 
-        // Navbar background on scroll
-        window.addEventListener('scroll', function() {
-            const nav = document.querySelector('nav');
-            if (window.scrollY > 50) {
-                nav.style.background = 'rgba(10, 10, 10, 0.9)';
-            } else {
-                nav.style.background = 'rgba(10, 10, 10, 0.7)';
-            }
-        });
+        function animateCursor() {
+            const ease = 0.15;
+            cursorX += (mouseX - cursorX) * ease;
+            cursorY += (mouseY - cursorY) * ease;
 
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            cursorDot.style.left = dotX + 'px';
+            cursorDot.style.top = dotY + 'px';
 
-
-        // Initialize
-        window.addEventListener('load', function() {
-            createParticles();
-            typeWriter();
-        });
-
-        // Add hover effects to project cards
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-15px) scale(1.02)';
-            });
-
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Cursor glow follows mouse
-        const cursorGlow = document.getElementById('cursor-glow');
-
-        // Detect if device has a fine pointer (desktop mouse)
-        const isDesktop = window.matchMedia("(pointer: fine)").matches;
-
-        if (isDesktop) {
-          // Only run cursor glow animation on desktop
-          let cursorX = window.innerWidth / 2;
-          let cursorY = window.innerHeight / 2;
-          let targetX = cursorX;
-          let targetY = cursorY;
-
-          document.addEventListener('mousemove', (e) => {
-            targetX = e.clientX;
-            targetY = e.clientY;
-          });
-
-          function animateCursor() {
-            cursorX += (targetX - cursorX) * 0.2; // easing
-            cursorY += (targetY - cursorY) * 0.2;
-            cursorGlow.style.top = cursorY + 'px';
-            cursorGlow.style.left = cursorX + 'px';
             requestAnimationFrame(animateCursor);
-          }
-          animateCursor();
-        } else {
-          // On mobile: completely remove the glow element
-          cursorGlow.remove();
         }
+        animateCursor();
 
+        // Enhanced cursor interactions
+        const interactiveElements = document.querySelectorAll('a, button, .project-card, .stat-card, .skill-tag');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(1.8)';
+                cursor.style.borderColor = 'var(--secondary)';
+                cursor.style.opacity = '1';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.borderColor = 'var(--primary)';
+                cursor.style.opacity = '0.8';
+            });
+        });
 
-
-        // Graph background with moving nodes
-        const canvas = document.getElementById('graph-bg');
+        // Premium Animated Background
+        const canvas = document.querySelector('.bg-animation');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        let nodes = [];
-        const numNodes = 50;
+        let particles = [];
+        const particleCount = 100;
 
-        // Create random nodes
-        for (let i = 0; i < numNodes; i++) {
-          nodes.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.2,
-            vy: (Math.random() - 0.5) * 0.2
-          });
-        }
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8;
+                this.radius = Math.random() * 2.5 + 0.5;
+            }
 
-        function drawGraph(mouseX, mouseY) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
 
-          nodes.forEach((n, i) => {
-            // move nodes
-            n.x += n.vx;
-            n.y += n.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
 
-            // bounce off walls
-            if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
-            if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
-
-            // draw node
-            ctx.beginPath();
-            ctx.arc(n.x, n.y, 2, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(0,255,136,0.6)";
-            ctx.fill();
-
-            // connect nearby nodes
-            for (let j = i + 1; j < nodes.length; j++) {
-              const n2 = nodes[j];
-              const dist = Math.hypot(n.x - n2.x, n.y - n2.y);
-              if (dist < 120) {
-                ctx.strokeStyle = `rgba(0,255,136,${1 - dist / 120})`;
-                ctx.lineWidth = 0.6;
+            draw() {
                 ctx.beginPath();
-                ctx.moveTo(n.x, n.y);
-                ctx.lineTo(n2.x, n2.y);
-                ctx.stroke();
-              }
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 255, 136, 0.8)';
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'rgba(0, 255, 136, 0.5)';
+                ctx.fill();
+                ctx.shadowBlur = 0;
             }
-
-            // subtle attraction to cursor
-            if (mouseX && mouseY) {
-              const dx = n.x - mouseX;
-              const dy = n.y - mouseY;
-              const dist = Math.hypot(dx, dy);
-              if (dist < 150) {
-                n.vx += dx * -0.0005;
-                n.vy += dy * -0.0005;
-              }
-            }
-          });
         }
 
-        let mouseX = null, mouseY = null;
-        document.addEventListener('mousemove', (e) => {
-          mouseX = e.clientX;
-          mouseY = e.clientY;
-        });
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 255, 136, ${0.4 * (1 - distance / 150)})`;
+                        ctx.lineWidth = 1.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
 
         function animate() {
-          drawGraph(mouseX, mouseY);
-          requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            connectParticles();
+            requestAnimationFrame(animate);
         }
         animate();
 
-        // Handle resize
-        window.addEventListener('resize', () => {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
+        // Scroll Reveal Animations
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('active');
+                    }, index * 100);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -80px 0px'
         });
 
+        revealElements.forEach(el => revealObserver.observe(el));
 
+        // Premium Navbar Effect
+        const nav = document.getElementById('nav');
+        let lastScroll = 0;
 
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
 
-        // Remove parallax effect - hero stays in place
-        </script>
-        </div> <!-- close data-scroll-container -->
+            if (currentScroll > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
 
-        <!-- Locomotive Scroll JS -->
-        <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.2.2/dist/locomotive-scroll.min.js"></script>
-        <script>
-          const scroll = new LocomotiveScroll({
-            el: document.querySelector('[data-scroll-container]'),
-            smooth: true,
-            lerp: 0.08,
-            multiplier: 1
-          });
-        </script>
+            lastScroll = currentScroll;
+        });
 
+        // Smooth Scroll with Easing
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
 
+        // Resize Handler
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
 
+        // Button Ripple Effect
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
 
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
 
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Magnetic Effect for Cards
+        document.querySelectorAll('.project-card, .stat-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const moveX = (x - centerX) / 25;
+                const moveY = (y - centerY) / 25;
+
+                card.style.transform = `translate(${moveX}px, ${moveY}px) translateY(-12px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translate(0, 0)';
+            });
+        });
+
+        // Text Animation on Scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.section-title, .hero h1');
+            elements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight * 0.8;
+
+                if (isVisible) {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll();
+    </script>
 </body>
 </html>
