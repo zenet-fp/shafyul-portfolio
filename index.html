@@ -486,6 +486,25 @@
             overflow: hidden;
         }
 
+        .stat-card .detail-panel {
+          position: absolute;
+          top: 50%;
+          left: -250px; /* place it to the left of the card, adjust as needed */
+          transform: translateY(-50%);
+          width: 220px;
+          padding: 20px;
+          background: rgba(20, 20, 20, 0.9);
+          border-radius: 12px;
+          color: var(--text-secondary);
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .stat-card.hovered .detail-panel {
+          opacity: 1;
+        }
+
         .stat-card::after {
             content: '';
             position: absolute;
@@ -889,23 +908,41 @@
                     </p>
                     <div class="quote-section">
                         <div class="quote-label">My Favourite Quote</div>
-                        <em>"We have proposed a system for electronic transactions without relying on trust."</em>
+                        <em>"Simple can be harder than complex."</em>
                         <div style="margin-top: 10px; color: var(--text-secondary); font-size: 0.95rem;">
-                            — Satoshi Nakamoto, 2008
+                            — Steve Jobs
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="about-stats reveal">
-                <div class="stat-card">
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">Projects Completed</div>
+              <div class="stat-card" data-type="projects">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Projects Completed</div>
+                <div class="detail-panel">
+                  <h4>Projects I've Built:</h4>
+                  <ul>
+                    <li>Math Educator App</li>
+                    <li>Dijkstra Visualiser</li>
+                    <li>Personal Finance Manager</li>
+                    <!-- more ... -->
+                  </ul>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number">10+</div>
-                    <div class="stat-label">Industry Standard Algorithms Implemented</div>
+              </div>
+              <div class="stat-card" data-type="algos">
+                <div class="stat-number">10+</div>
+                <div class="stat-label">Algorithms Implemented</div>
+                <div class="detail-panel">
+                  <h4>Algorithms I've Implemented:</h4>
+                  <ul>
+                    <li>A*</li>
+                    <li>BFS / DFS</li>
+                    <li>Kruskal / Prim / Recursive Backtracker</li>
+                    <!-- more ... -->
+                  </ul>
                 </div>
+              </div>
             </div>
 
             <div class="about-card skills-card reveal">
@@ -913,14 +950,14 @@
                 <div class="skills-grid">
                     <span class="skill-tag">Python</span>
                     <span class="skill-tag">SQL Databases</span>
-                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">Software Architecture</span>
+                    <span class="skill-tag">Software Development</span>
+                    <span class="skill-tag">Object Oriented Programming</span>
                     <span class="skill-tag">JSON</span>
-                    <span class="skill-tag">Tkinter</span>
                     <span class="skill-tag">Data Analysis</span>
                     <span class="skill-tag">Algorithm Design</span>
                     <span class="skill-tag">Problem Solving</span>
-                    <span class="skill-tag">OOP</span>
-                    <span class="skill-tag">Software Architecture</span>
+
                 </div>
             </div>
         </div>
@@ -1321,6 +1358,35 @@
 
         window.addEventListener('scroll', animateOnScroll);
         animateOnScroll();
+
+        document.querySelectorAll('.stat-card').forEach(card => {
+          const panel = card.querySelector('.detail-panel');
+
+          card.addEventListener('mouseenter', () => {
+            card.classList.add('hovered');
+          });
+
+          card.addEventListener('mouseleave', () => {
+            card.classList.remove('hovered');
+            // reset panel transform
+            panel.style.transform = `translateY(-50%) translateX(0)`;
+          });
+
+          card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const relX = e.clientX - rect.left;
+            const relY = e.clientY - rect.top;
+
+            // What ratio? between -1 and 1
+            const offsetX = (relX / rect.width - 0.5) * 30; // adjust 30px max offset
+            const offsetY = (relY / rect.height - 0.5) * 20;
+
+            // Move panel accordingly. Since panel is positioned left, we move it slightly more left/right:
+            panel.style.transform = `translateY(-50%) translateX(${offsetX}px) translateY(${offsetY}px)`;
+          });
+        });
+
+
     </script>
 </body>
 </html>
